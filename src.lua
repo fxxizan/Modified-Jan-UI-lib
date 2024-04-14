@@ -11,12 +11,12 @@ getgenv().textService = cloneref(game:GetService"TextService")
 getgenv().inputService = cloneref(game:GetService"UserInputService")
 getgenv().tweenService = cloneref(game:GetService"TweenService")
 
-if getgenv().library then
-    getgenv().library:Unload()
+if getgenv().Library then
+    getgenv().Library:Unload()
 end
 
 local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt"}
-getgenv().library = library
+getgenv().Library = library
 
 --Locals
 local dragging, dragInput, dragStart, startPos, dragObject
@@ -29,13 +29,13 @@ local whitelistedMouseinputs = { --add or remove mouse inputs if you find the ne
 }
 
 --Functions
-library.round = function(num, bracket)
+Library.round = function(num, bracket)
     if typeof(num) == "Vector2" then
-        return Vector2.new(library.round(num.X), library.round(num.Y))
+        return Vector2.new(Library.round(num.X), Library.round(num.Y))
     elseif typeof(num) == "Vector3" then
-        return Vector3.new(library.round(num.X), library.round(num.Y), library.round(num.Z))
+        return Vector3.new(Library.round(num.X), Library.round(num.Y), Library.round(num.Z))
     elseif typeof(num) == "Color3" then
-        return library.round(num.r * 255), library.round(num.g * 255), library.round(num.b * 255)
+        return Library.round(num.r * 255), Library.round(num.g * 255), Library.round(num.b * 255)
     else
         return num - num % (bracket or 1);
     end
@@ -51,7 +51,7 @@ task.spawn(function()
     end
 end)
 
-function library:Create(class, properties)
+function Library:Create(class, properties)
     properties = properties or {}
     if not class then return end
     local a = class == "Square" or class == "Line" or class == "Text" or class == "Quad" or class == "Circle" or class == "Triangle"
@@ -64,7 +64,7 @@ function library:Create(class, properties)
     return inst
 end
 
-function library:AddConnection(connection, name, callback)
+function Library:AddConnection(connection, name, callback)
     callback = type(name) == "function" and name or callback
     connection = connection:connect(callback)
     if name ~= callback then
@@ -75,7 +75,7 @@ function library:AddConnection(connection, name, callback)
     return connection
 end
 
-function library:Unload()
+function Library:Unload()
     for _, c in next, self.connections do
         c:Disconnect()
     end
@@ -95,7 +95,7 @@ function library:Unload()
     getgenv().library = nil
 end
 
-function library:LoadConfig(config)
+function Library:LoadConfig(config)
     if table.find(self:GetConfigs(), config) then
         local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(self.foldername .. "/" .. config .. self.fileext)) end)
         Config = Read and Config or {}
@@ -122,7 +122,7 @@ function library:LoadConfig(config)
     end
 end
 
-function library:SaveConfig(config)
+function Library:SaveConfig(config)
     local Config = {}
     if table.find(self:GetConfigs(), config) then
         Config = cloneref(game:GetService"HttpService"):JSONDecode(readfile(self.foldername .. "/" .. config .. self.fileext))
@@ -150,7 +150,7 @@ function library:SaveConfig(config)
     writefile(self.foldername .. "/" .. config .. self.fileext, cloneref(game:GetService"HttpService"):JSONEncode(Config))
 end
 
-function library:GetConfigs()
+function Library:GetConfigs()
     if not isfolder(self.foldername) then
         makefolder(self.foldername)
         return {}
@@ -168,8 +168,8 @@ function library:GetConfigs()
     return files
 end
 
-library.createLabel = function(option, parent)
-    option.main = library:Create("TextLabel", {
+Library.createLabel = function(option, parent)
+    option.main = Library:Create("TextLabel", {
         LayoutOrder = option.position,
         Position = UDim2.new(0, 6, 0, 0),
         Size = UDim2.new(1, -12, 0, 24),
@@ -192,15 +192,15 @@ library.createLabel = function(option, parent)
     option.Text = option.text
 end
 
-library.createDivider = function(option, parent)
-    option.main = library:Create("Frame", {
+Library.createDivider = function(option, parent)
+    option.main = Library:Create("Frame", {
         LayoutOrder = option.position,
         Size = UDim2.new(1, 0, 0, 18),
         BackgroundTransparency = 1,
         Parent = parent
     })
 
-    library:Create("Frame", {
+    Library:Create("Frame", {
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
         Size = UDim2.new(1, -24, 0, 1),
@@ -209,7 +209,7 @@ library.createDivider = function(option, parent)
         Parent = option.main
     })
 
-    option.title = library:Create("TextLabel", {
+    option.title = Library:Create("TextLabel", {
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(0.5, 0, 0.5, 0),
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
@@ -237,10 +237,10 @@ library.createDivider = function(option, parent)
     option.Text = option.text
 end
 
-library.createToggle = function(option, parent)
+Library.createToggle = function(option, parent)
     option.hasInit = true
 
-    option.main = library:Create("Frame", {
+    option.main = Library:Create("Frame", {
         LayoutOrder = option.position,
         Size = UDim2.new(1, 0, 0, 20),
         BackgroundTransparency = 1,
@@ -250,7 +250,7 @@ library.createToggle = function(option, parent)
     local tickbox
     local tickboxOverlay
     if option.style then
-        tickbox = library:Create("ImageLabel", {
+        tickbox = Library:Create("ImageLabel", {
             Position = UDim2.new(0, 6, 0, 4),
             Size = UDim2.new(0, 12, 0, 12),
             BackgroundTransparency = 1,
@@ -259,7 +259,7 @@ library.createToggle = function(option, parent)
             Parent = option.main
         })
 
-        library:Create("ImageLabel", {
+        Library:Create("ImageLabel", {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             Size = UDim2.new(1, -2, 1, -2),
@@ -269,7 +269,7 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        library:Create("ImageLabel", {
+        Library:Create("ImageLabel", {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             Size = UDim2.new(1, -6, 1, -6),
@@ -279,18 +279,18 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        tickboxOverlay = library:Create("ImageLabel", {
+        tickboxOverlay = Library:Create("ImageLabel", {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             Size = UDim2.new(1, -6, 1, -6),
             BackgroundTransparency = 1,
             Image = "rbxassetid://3570695787",
-            ImageColor3 = library.flags["Menu Accent Color"],
+            ImageColor3 = Library.flags["Menu Accent Color"],
             Visible = option.state,
             Parent = tickbox
         })
 
-        library:Create("ImageLabel", {
+        Library:Create("ImageLabel", {
             AnchorPoint = Vector2.new(0.5, 0.5),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             Size = UDim2.new(1, 0, 1, 0),
@@ -300,17 +300,17 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        table.insert(library.theme, tickboxOverlay)
+        table.insert(Library.theme, tickboxOverlay)
     else
-        tickbox = library:Create("Frame", {
+        tickbox = Library:Create("Frame", {
             Position = UDim2.new(0, 6, 0, 4),
             Size = UDim2.new(0, 12, 0, 12),
-            BackgroundColor3 = library.flags["Menu Accent Color"],
+            BackgroundColor3 = Library.flags["Menu Accent Color"],
             BorderColor3 = Color3.new(),
             Parent = option.main
         })
 
-        tickboxOverlay = library:Create("ImageLabel", {
+        tickboxOverlay = Library:Create("ImageLabel", {
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = option.state and 1 or 0,
             BackgroundColor3 = Color3.fromRGB(50, 50, 50),
@@ -321,7 +321,7 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        library:Create("ImageLabel", {
+        Library:Create("ImageLabel", {
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
             Image = "rbxassetid://2592362371",
@@ -331,7 +331,7 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        library:Create("ImageLabel", {
+        Library:Create("ImageLabel", {
             Size = UDim2.new(1, -2, 1, -2),
             Position = UDim2.new(0, 1, 0, 1),
             BackgroundTransparency = 1,
@@ -342,17 +342,17 @@ library.createToggle = function(option, parent)
             Parent = tickbox
         })
 
-        table.insert(library.theme, tickbox)
+        table.insert(Library.theme, tickbox)
     end
 
-    option.interest = library:Create("Frame", {
+    option.interest = Library:Create("Frame", {
         Position = UDim2.new(0, 0, 0, 0),
         Size = UDim2.new(1, 0, 0, 20),
         BackgroundTransparency = 1,
         Parent = option.main
     })
 
-    option.title = library:Create("TextLabel", {
+    option.title = Library:Create("TextLabel", {
         Position = UDim2.new(0, 24, 0, 0),
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -369,20 +369,20 @@ library.createToggle = function(option, parent)
             option:SetState(not option.state)
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
+            if not Library.warning and not Library.slider then
                 if option.style then
-                    tickbox.ImageColor3 = library.flags["Menu Accent Color"]
-                    --tweenService:Create(tickbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageColor3 = library.flags["Menu Accent Color"]}):Play()
+                    tickbox.ImageColor3 = Library.flags["Menu Accent Color"]
+                    --tweenService:Create(tickbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageColor3 = Library.flags["Menu Accent Color"]}):Play()
                 else
-                    tickbox.BorderColor3 = library.flags["Menu Accent Color"]
-                    tickboxOverlay.BorderColor3 = library.flags["Menu Accent Color"]
-                    --tweenService:Create(tickbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = library.flags["Menu Accent Color"]}):Play()
-                    --tweenService:Create(tickboxOverlay, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = library.flags["Menu Accent Color"]}):Play()
+                    tickbox.BorderColor3 = Library.flags["Menu Accent Color"]
+                    tickboxOverlay.BorderColor3 = Library.flags["Menu Accent Color"]
+                    --tweenService:Create(tickbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = Library.flags["Menu Accent Color"]}):Play()
+                    --tweenService:Create(tickboxOverlay, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = Library.flags["Menu Accent Color"]}):Play()
                 end
             end
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
     end)
@@ -390,7 +390,7 @@ library.createToggle = function(option, parent)
     option.interest.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
@@ -406,14 +406,14 @@ library.createToggle = function(option, parent)
                 --tweenService:Create(tickbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = Color3.new()}):Play()
                 --tweenService:Create(tickboxOverlay, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BorderColor3 = Color3.new()}):Play()
             end
-            library.tooltip.Position = UDim2.new(2)
+            Library.tooltip.Position = UDim2.new(2)
         end
     end)
 
     function option:SetState(state, nocallback)
         state = typeof(state) == "boolean" and state
         state = state or false
-        library.flags[self.flag] = state
+        Library.flags[self.flag] = state
         self.state = state
         option.title.TextColor3 = state and Color3.fromRGB(210, 210, 210) or Color3.fromRGB(160, 160, 160)
         if option.style then
@@ -441,17 +441,17 @@ library.createToggle = function(option, parent)
     end})
 end
 
-library.createButton = function(option, parent)
+Library.createButton = function(option, parent)
     option.hasInit = true
 
-    option.main = library:Create("Frame", {
+    option.main = Library:Create("Frame", {
         LayoutOrder = option.position,
         Size = UDim2.new(1, 0, 0, 28),
         BackgroundTransparency = 1,
         Parent = parent
     })
 
-    option.title = library:Create("TextLabel", {
+    option.title = Library:Create("TextLabel", {
         AnchorPoint = Vector2.new(0.5, 1),
         Position = UDim2.new(0.5, 0, 1, -5),
         Size = UDim2.new(1, -12, 0, 20),
@@ -464,7 +464,7 @@ library.createButton = function(option, parent)
         Parent = option.main
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -474,7 +474,7 @@ library.createButton = function(option, parent)
         Parent = option.title
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -485,7 +485,7 @@ library.createButton = function(option, parent)
         Parent = option.title
     })
 
-    library:Create("UIGradient", {
+    Library:Create("UIGradient", {
         Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 180, 180)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(253, 253, 253)),
@@ -498,16 +498,16 @@ library.createButton = function(option, parent)
         if input.UserInputType.Name == "MouseButton1" then
             option.callback()
             if library then
-                library.flags[option.flag] = true
+                Library.flags[option.flag] = true
             end
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
-                option.title.BorderColor3 = library.flags["Menu Accent Color"]
+            if not Library.warning and not Library.slider then
+                option.title.BorderColor3 = Library.flags["Menu Accent Color"]
             end
         end
     end)
@@ -515,7 +515,7 @@ library.createButton = function(option, parent)
     option.title.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
@@ -523,12 +523,12 @@ library.createButton = function(option, parent)
     option.title.InputEnded:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             option.title.BorderColor3 = Color3.new()
-            library.tooltip.Position = UDim2.new(2)
+            Library.tooltip.Position = UDim2.new(2)
         end
     end)
 end
 
-library.createBind = function(option, parent)
+Library.createBind = function(option, parent)
     option.hasInit = true
 
     local binding
@@ -538,14 +538,14 @@ library.createBind = function(option, parent)
     if option.sub then
         option.main = option:getMain()
     else
-        option.main = option.main or library:Create("Frame", {
+        option.main = option.main or Library:Create("Frame", {
             LayoutOrder = option.position,
             Size = UDim2.new(1, 0, 0, 20),
             BackgroundTransparency = 1,
             Parent = parent
         })
 
-        library:Create("TextLabel", {
+        Library:Create("TextLabel", {
             Position = UDim2.new(0, 6, 0, 0),
             Size = UDim2.new(1, -12, 1, 0),
             BackgroundTransparency = 1,
@@ -558,7 +558,7 @@ library.createBind = function(option, parent)
         })
     end
 
-    local bindinput = library:Create(option.sub and "TextButton" or "TextLabel", {
+    local bindinput = Library:Create(option.sub and "TextButton" or "TextLabel", {
         Position = UDim2.new(1, -6 - (option.subpos or 0), 0, option.sub and 2 or 3),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
@@ -581,11 +581,11 @@ library.createBind = function(option, parent)
             binding = true
             bindinput.Text = "[...]"
             bindinput.Size = UDim2.new(0, -textService:GetTextSize(bindinput.Text, 16, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 16)
-            bindinput.TextColor3 = library.flags["Menu Accent Color"]
+            bindinput.TextColor3 = Library.flags["Menu Accent Color"]
         end
     end)
 
-    library:AddConnection(inputService.InputBegan, function(input)
+    Library:AddConnection(inputService.InputBegan, function(input)
         if inputService:GetFocusedTextBox() then return end
         if binding then
             local key = (table.find(whitelistedMouseinputs, input.UserInputType) and not option.nomouse) and input.UserInputType
@@ -593,12 +593,12 @@ library.createBind = function(option, parent)
         else
             if (input.KeyCode.Name == option.key or input.UserInputType.Name == option.key) and not binding then
                 if option.mode == "toggle" then
-                    library.flags[option.flag] = not library.flags[option.flag]
-                    option.callback(library.flags[option.flag], 0)
+                    Library.flags[option.flag] = not Library.flags[option.flag]
+                    option.callback(Library.flags[option.flag], 0)
                 else
-                    library.flags[option.flag] = true
+                    Library.flags[option.flag] = true
                     if Loop then Loop:Disconnect() option.callback(true, 0) end
-                    Loop = library:AddConnection(runService.RenderStepped, function(step)
+                    Loop = Library:AddConnection(runService.RenderStepped, function(step)
                         if not inputService:GetFocusedTextBox() then
                             option.callback(nil, step)
                         end
@@ -608,12 +608,12 @@ library.createBind = function(option, parent)
         end
     end)
 
-    library:AddConnection(inputService.InputEnded, function(input)
+    Library:AddConnection(inputService.InputEnded, function(input)
         if option.key ~= "none" then
             if input.KeyCode.Name == option.key or input.UserInputType.Name == option.key then
                 if Loop then
                     Loop:Disconnect()
-                    library.flags[option.flag] = false
+                    Library.flags[option.flag] = false
                     option.callback(true, 0)
                 end
             end
@@ -623,7 +623,7 @@ library.createBind = function(option, parent)
     function option:SetKey(key)
         binding = false
         bindinput.TextColor3 = Color3.fromRGB(160, 160, 160)
-        if Loop then Loop:Disconnect() library.flags[option.flag] = false option.callback(true, 0) end
+        if Loop then Loop:Disconnect() Library.flags[option.flag] = false option.callback(true, 0) end
         self.key = (key and key.Name) or key or self.key
         if self.key == "Backspace" then
             self.key = "none"
@@ -642,14 +642,14 @@ library.createBind = function(option, parent)
     option:SetKey()
 end
 
-library.createSlider = function(option, parent)
+Library.createSlider = function(option, parent)
     option.hasInit = true
 
     if option.sub then
         option.main = option:getMain()
         option.main.Size = UDim2.new(1, 0, 0, 42)
     else
-        option.main = library:Create("Frame", {
+        option.main = Library:Create("Frame", {
             LayoutOrder = option.position,
             Size = UDim2.new(1, 0, 0, option.textpos and 24 or 40),
             BackgroundTransparency = 1,
@@ -657,7 +657,7 @@ library.createSlider = function(option, parent)
         })
     end
 
-    option.slider = library:Create("Frame", {
+    option.slider = Library:Create("Frame", {
         Position = UDim2.new(0, 6, 0, (option.sub and 22 or option.textpos and 4 or 20)),
         Size = UDim2.new(1, -12, 0, 16),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
@@ -665,7 +665,7 @@ library.createSlider = function(option, parent)
         Parent = option.main
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -674,13 +674,13 @@ library.createSlider = function(option, parent)
         Parent = option.slider
     })
 
-    option.fill = library:Create("Frame", {
-        BackgroundColor3 = library.flags["Menu Accent Color"],
+    option.fill = Library:Create("Frame", {
+        BackgroundColor3 = Library.flags["Menu Accent Color"],
         BorderSizePixel = 0,
         Parent = option.slider
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -690,7 +690,7 @@ library.createSlider = function(option, parent)
         Parent = option.slider
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -701,7 +701,7 @@ library.createSlider = function(option, parent)
         Parent = option.slider
     })
 
-    option.title = library:Create("TextBox", {
+    option.title = Library:Create("TextBox", {
         Position = UDim2.new((option.sub or option.textpos) and 0.5 or 0, (option.sub or option.textpos) and 0 or 6, 0, 0),
         Size = UDim2.new(0, 0, 0, (option.sub or option.textpos) and 14 or 18),
         BackgroundTransparency = 1,
@@ -712,9 +712,9 @@ library.createSlider = function(option, parent)
         TextXAlignment = Enum.TextXAlignment[(option.sub or option.textpos) and "Center" or "Left"],
         Parent = (option.sub or option.textpos) and option.slider or option.main
     })
-    table.insert(library.theme, option.fill)
+    table.insert(Library.theme, option.fill)
 
-    library:Create("UIGradient", {
+    Library:Create("UIGradient", {
         Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.fromRGB(115, 115, 115)),
             ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1)),
@@ -757,18 +757,18 @@ library.createSlider = function(option, parent)
                 manualInput = true
                 option.title:CaptureFocus()
             else
-                library.slider = option
-                option.slider.BorderColor3 = library.flags["Menu Accent Color"]
+                Library.slider = option
+                option.slider.BorderColor3 = Library.flags["Menu Accent Color"]
                 option:SetValue(option.min + ((input.Position.X - option.slider.AbsolutePosition.X) / option.slider.AbsoluteSize.X) * (option.max - option.min))
             end
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
-                option.slider.BorderColor3 = library.flags["Menu Accent Color"]
+            if not Library.warning and not Library.slider then
+                option.slider.BorderColor3 = Library.flags["Menu Accent Color"]
             end
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
     end)
@@ -776,15 +776,15 @@ library.createSlider = function(option, parent)
     interest.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
 
     interest.InputEnded:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
-            library.tooltip.Position = UDim2.new(2)
-            if option ~= library.slider then
+            Library.tooltip.Position = UDim2.new(2)
+            if option ~= Library.slider then
                 option.slider.BorderColor3 = Color3.new()
                 --option.fill.BorderColor3 = Color3.new()
             end
@@ -793,7 +793,7 @@ library.createSlider = function(option, parent)
 
     function option:SetValue(value, nocallback)
         if typeof(value) ~= "number" then value = 0 end
-        value = library.round(value, option.float)
+        value = Library.round(value, option.float)
         value = math.clamp(value, self.min, self.max)
         if self.min >= 0 then
             option.fill:TweenSize(UDim2.new((value - self.min) / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.05, true)
@@ -801,7 +801,7 @@ library.createSlider = function(option, parent)
             option.fill:TweenPosition(UDim2.new((0 - self.min) / (self.max - self.min), 0, 0, 0), "Out", "Quad", 0.05, true)
             option.fill:TweenSize(UDim2.new(value / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.1, true)
         end
-        library.flags[self.flag] = value
+        Library.flags[self.flag] = value
         self.value = value
         option.title.Text = (option.text == "nil" and "" or option.text .. ": ") .. option.value .. option.suffix
         if not nocallback then
@@ -815,14 +815,14 @@ library.createSlider = function(option, parent)
     end)
 end
 
-library.createList = function(option, parent)
+Library.createList = function(option, parent)
     option.hasInit = true
 
     if option.sub then
         option.main = option:getMain()
         option.main.Size = UDim2.new(1, 0, 0, 48)
     else
-        option.main = library:Create("Frame", {
+        option.main = Library:Create("Frame", {
             LayoutOrder = option.position,
             Size = UDim2.new(1, 0, 0, option.text == "nil" and 30 or 48),
             BackgroundTransparency = 1,
@@ -830,7 +830,7 @@ library.createList = function(option, parent)
         })
 
         if option.text ~= "nil" then
-            library:Create("TextLabel", {
+            Library:Create("TextLabel", {
                 Position = UDim2.new(0, 6, 0, 0),
                 Size = UDim2.new(1, -12, 0, 18),
                 BackgroundTransparency = 1,
@@ -852,7 +852,7 @@ library.createList = function(option, parent)
         return string.sub(s, 1, #s - 2)
     end
 
-    option.listvalue = library:Create("TextLabel", {
+    option.listvalue = Library:Create("TextLabel", {
         Position = UDim2.new(0, 6, 0, (option.text == "nil" and not option.sub) and 4 or 22),
         Size = UDim2.new(1, -12, 0, 22),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
@@ -866,7 +866,7 @@ library.createList = function(option, parent)
         Parent = option.main
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -875,7 +875,7 @@ library.createList = function(option, parent)
         Parent = option.listvalue
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -885,7 +885,7 @@ library.createList = function(option, parent)
         Parent = option.listvalue
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -896,7 +896,7 @@ library.createList = function(option, parent)
         Parent = option.listvalue
     })
 
-    option.arrow = library:Create("ImageLabel", {
+    option.arrow = Library:Create("ImageLabel", {
         Position = UDim2.new(1, -16, 0, 7),
         Size = UDim2.new(0, 8, 0, 8),
         Rotation = 90,
@@ -908,17 +908,17 @@ library.createList = function(option, parent)
         Parent = option.listvalue
     })
 
-    option.holder = library:Create("TextButton", {
+    option.holder = Library:Create("TextButton", {
         ZIndex = 4,
         BackgroundColor3 = Color3.fromRGB(40, 40, 40),
         BorderColor3 = Color3.new(),
         Text = "",
         AutoButtonColor = false,
         Visible = false,
-        Parent = library.base
+        Parent = Library.base
     })
 
-    option.content = library:Create("ScrollingFrame", {
+    option.content = Library:Create("ScrollingFrame", {
         ZIndex = 4,
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -932,7 +932,7 @@ library.createList = function(option, parent)
         Parent = option.holder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         ZIndex = 4,
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -943,7 +943,7 @@ library.createList = function(option, parent)
         Parent = option.holder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         ZIndex = 4,
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
@@ -955,12 +955,12 @@ library.createList = function(option, parent)
         Parent = option.holder
     })
 
-    local layout = library:Create("UIListLayout", {
+    local layout = Library:Create("UIListLayout", {
         Padding = UDim.new(0, 2),
         Parent = option.content
     })
 
-    library:Create("UIPadding", {
+    Library:Create("UIPadding", {
         PaddingTop = UDim.new(0, 4),
         PaddingLeft = UDim.new(0, 4),
         Parent = option.content
@@ -975,21 +975,21 @@ library.createList = function(option, parent)
 
     option.listvalue.InputBegan:connect(function(input)
         if input.UserInputType.Name == "MouseButton1" then
-            if library.popup == option then library.popup:Close() return end
-            if library.popup then
-                library.popup:Close()
+            if Library.popup == option then Library.popup:Close() return end
+            if Library.popup then
+                Library.popup:Close()
             end
             option.arrow.Rotation = -90
             option.open = true
             option.holder.Visible = true
             local pos = option.main.AbsolutePosition
             option.holder.Position = UDim2.new(0, pos.X + 6, 0, pos.Y + ((option.text == "nil" and not option.sub) and 66 or 84))
-            library.popup = option
-            option.listvalue.BorderColor3 = library.flags["Menu Accent Color"]
+            Library.popup = option
+            option.listvalue.BorderColor3 = Library.flags["Menu Accent Color"]
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
-                option.listvalue.BorderColor3 = library.flags["Menu Accent Color"]
+            if not Library.warning and not Library.slider then
+                option.listvalue.BorderColor3 = Library.flags["Menu Accent Color"]
             end
         end
     end)
@@ -1005,8 +1005,8 @@ library.createList = function(option, parent)
     interest.InputBegan:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
     end)
@@ -1014,14 +1014,14 @@ library.createList = function(option, parent)
     interest.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
 
     interest.InputEnded:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
-            library.tooltip.Position = UDim2.new(2)
+            Library.tooltip.Position = UDim2.new(2)
         end
     end)
 
@@ -1038,7 +1038,7 @@ library.createList = function(option, parent)
             end
         end
 
-        local label = library:Create("TextLabel", {
+        local label = Library:Create("TextLabel", {
             ZIndex = 4,
             Size = UDim2.new(1, 0, 0, 20),
             BackgroundTransparency = 1,
@@ -1052,20 +1052,20 @@ library.createList = function(option, parent)
         })
         self.labels[value] = label
 
-        local labelOverlay = library:Create("TextLabel", {
+        local labelOverlay = Library:Create("TextLabel", {
             ZIndex = 4,	
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 0.8,
             Text = " " ..value,
             TextSize = 15,
             Font = Enum.Font.Code,
-            TextColor3 = library.flags["Menu Accent Color"],
+            TextColor3 = Library.flags["Menu Accent Color"],
             TextXAlignment = Enum.TextXAlignment.Left,
             Visible = self.multiselect and self.value[value] or self.value == value,
             Parent = label
         })
         selected = selected or self.value == value and labelOverlay
-        table.insert(library.theme, labelOverlay)
+        table.insert(Library.theme, labelOverlay)
 
         label.InputBegan:connect(function(input)
             if input.UserInputType.Name == "MouseButton1" then
@@ -1111,7 +1111,7 @@ library.createList = function(option, parent)
             end
         end
         self.value = typeof(value) == "table" and value or tostring(table.find(self.values, value) and value or self.values[1])
-        library.flags[self.flag] = self.value
+        Library.flags[self.flag] = self.value
         option.listvalue.Text = " " .. (self.multiselect and getMultiText() or self.value)
         if self.multiselect then
             for name, label in next, self.labels do
@@ -1146,7 +1146,7 @@ library.createList = function(option, parent)
     end)
 
     function option:Close()
-        library.popup = nil
+        Library.popup = nil
         option.arrow.Rotation = 90
         self.open = false
         option.holder.Visible = false
@@ -1156,10 +1156,10 @@ library.createList = function(option, parent)
     return option
 end
 
-library.createBox = function(option, parent)
+Library.createBox = function(option, parent)
     option.hasInit = true
 
-    option.main = library:Create("Frame", {
+    option.main = Library:Create("Frame", {
         LayoutOrder = option.position,
         Size = UDim2.new(1, 0, 0, option.text == "nil" and 28 or 44),
         BackgroundTransparency = 1,
@@ -1167,7 +1167,7 @@ library.createBox = function(option, parent)
     })
 
     if option.text ~= "nil" then
-        option.title = library:Create("TextLabel", {
+        option.title = Library:Create("TextLabel", {
             Position = UDim2.new(0, 6, 0, 0),
             Size = UDim2.new(1, -12, 0, 18),
             BackgroundTransparency = 1,
@@ -1180,7 +1180,7 @@ library.createBox = function(option, parent)
         })
     end
 
-    option.holder = library:Create("Frame", {
+    option.holder = Library:Create("Frame", {
         Position = UDim2.new(0, 6, 0, option.text == "nil" and 4 or 20),
         Size = UDim2.new(1, -12, 0, 20),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
@@ -1188,7 +1188,7 @@ library.createBox = function(option, parent)
         Parent = option.main
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -1197,7 +1197,7 @@ library.createBox = function(option, parent)
         Parent = option.holder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -1207,7 +1207,7 @@ library.createBox = function(option, parent)
         Parent = option.holder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -1218,7 +1218,7 @@ library.createBox = function(option, parent)
         Parent = option.holder
     })
 
-    local inputvalue = library:Create("TextBox", {
+    local inputvalue = Library:Create("TextBox", {
         Position = UDim2.new(0, 4, 0, 0),
         Size = UDim2.new(1, -4, 1, 0),
         BackgroundTransparency = 1,
@@ -1238,7 +1238,7 @@ library.createBox = function(option, parent)
     end)
 
     inputvalue.Focused:connect(function()
-        option.holder.BorderColor3 = library.flags["Menu Accent Color"]
+        option.holder.BorderColor3 = Library.flags["Menu Accent Color"]
     end)
 
     inputvalue.InputBegan:connect(function(input)
@@ -1246,12 +1246,12 @@ library.createBox = function(option, parent)
             inputvalue.Text = ""
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
-                option.holder.BorderColor3 = library.flags["Menu Accent Color"]
+            if not Library.warning and not Library.slider then
+                option.holder.BorderColor3 = Library.flags["Menu Accent Color"]
             end
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
     end)
@@ -1259,7 +1259,7 @@ library.createBox = function(option, parent)
     inputvalue.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
@@ -1269,7 +1269,7 @@ library.createBox = function(option, parent)
             if not inputvalue:IsFocused() then
                 option.holder.BorderColor3 = Color3.new()
             end
-            library.tooltip.Position = UDim2.new(2)
+            Library.tooltip.Position = UDim2.new(2)
         end
     end)
 
@@ -1277,7 +1277,7 @@ library.createBox = function(option, parent)
         if tostring(value) == "" then
             inputvalue.Text = self.value
         else
-            library.flags[self.flag] = tostring(value)
+            Library.flags[self.flag] = tostring(value)
             self.value = tostring(value)
             inputvalue.Text = self.value
             self.callback(value, enter)
@@ -1290,8 +1290,8 @@ library.createBox = function(option, parent)
     end)
 end
 
-library.createColorPickerWindow = function(option)
-    option.mainHolder = library:Create("TextButton", {
+Library.createColorPickerWindow = function(option)
+    option.mainHolder = Library:Create("TextButton", {
         ZIndex = 4,
         --Position = UDim2.new(1, -184, 1, 6),
         Size = UDim2.new(0, option.trans and 200 or 184, 0, 264),
@@ -1299,10 +1299,10 @@ library.createColorPickerWindow = function(option)
         BorderColor3 = Color3.new(),
         AutoButtonColor = false,
         Visible = false,
-        Parent = library.base
+        Parent = Library.base
     })
 
-    option.rgbBox = library:Create("Frame", {
+    option.rgbBox = Library:Create("Frame", {
         Position = UDim2.new(0, 6, 0, 214),
         Size = UDim2.new(0, (option.mainHolder.AbsoluteSize.X - 12), 0, 20),
         BackgroundColor3 = Color3.fromRGB(57, 57, 57),
@@ -1311,7 +1311,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.mainHolder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -1321,7 +1321,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.rgbBox
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -1332,7 +1332,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.rgbBox
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -1344,7 +1344,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.rgbBox
     })
 
-    option.rgbInput = library:Create("TextBox", {
+    option.rgbInput = Library:Create("TextBox", {
         Position = UDim2.new(0, 4, 0, 0),
         Size = UDim2.new(1, -4, 1, 0),
         BackgroundTransparency = 1,
@@ -1365,7 +1365,7 @@ library.createColorPickerWindow = function(option)
     option.hexBox.Parent = option.mainHolder
     option.hexInput = option.hexBox.TextBox;
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         ZIndex = 4,
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -1376,7 +1376,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.mainHolder
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         ZIndex = 4,
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
@@ -1396,14 +1396,14 @@ library.createColorPickerWindow = function(option)
 
     local transMain
     if option.trans then
-        transMain = library:Create("ImageLabel", {
+        transMain = Library:Create("ImageLabel", {
             ZIndex = 5,
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
             Image = "rbxassetid://2454009026",
             ImageColor3 = Color3.fromHSV(hue, 1, 1),
             Rotation = 180,
-            Parent = library:Create("ImageLabel", {
+            Parent = Library:Create("ImageLabel", {
                 ZIndex = 4,
                 AnchorPoint = Vector2.new(1, 0),
                 Position = UDim2.new(1, -6, 0, 6),
@@ -1416,7 +1416,7 @@ library.createColorPickerWindow = function(option)
             })
         })
 
-        option.transSlider = library:Create("Frame", {
+        option.transSlider = Library:Create("Frame", {
             ZIndex = 5,
             Position = UDim2.new(0, 0, option.trans, 0),
             Size = UDim2.new(1, 0, 0, 2),
@@ -1439,7 +1439,7 @@ library.createColorPickerWindow = function(option)
         end)
     end
 
-    local hueMain = library:Create("Frame", {
+    local hueMain = Library:Create("Frame", {
         ZIndex = 4,
         AnchorPoint = Vector2.new(0, 1),
         Position = UDim2.new(0, 6, 1, -54),
@@ -1449,7 +1449,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.mainHolder
     })
 
-    local Gradient = library:Create("UIGradient", {
+    local Gradient = Library:Create("UIGradient", {
         Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
             ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 0, 255)),
@@ -1462,7 +1462,7 @@ library.createColorPickerWindow = function(option)
         Parent = hueMain
     })
 
-    local hueSlider = library:Create("Frame", {
+    local hueSlider = Library:Create("Frame", {
         ZIndex = 4,
         Position = UDim2.new(1 - hue, 0, 0, 0),
         Size = UDim2.new(0, 2, 1, 0),
@@ -1486,7 +1486,7 @@ library.createColorPickerWindow = function(option)
         end
     end)
 
-    local satval = library:Create("ImageLabel", {
+    local satval = Library:Create("ImageLabel", {
         ZIndex = 4,
         Position = UDim2.new(0, 6, 0, 6),
         Size = UDim2.new(1, option.trans and -28 or -12, 1, -74),
@@ -1497,7 +1497,7 @@ library.createColorPickerWindow = function(option)
         Parent = option.mainHolder
     })
 
-    local satvalSlider = library:Create("Frame", {
+    local satvalSlider = Library:Create("Frame", {
         ZIndex = 4,
         AnchorPoint = Vector2.new(0.5, 0.5),
         Position = UDim2.new(sat, 0, 1 - val, 0),
@@ -1518,7 +1518,7 @@ library.createColorPickerWindow = function(option)
         end
     end)
 
-    library:AddConnection(inputService.InputChanged, function(Input)
+    Library:AddConnection(inputService.InputChanged, function(Input)
         if Input.UserInputType.Name == "MouseMovement" then
             if editingsatval then
                 X = (satval.AbsolutePosition.X + satval.AbsoluteSize.X) - satval.AbsolutePosition.X
@@ -1542,7 +1542,7 @@ library.createColorPickerWindow = function(option)
         end
     end)
 
-    local r, g, b = library.round(option.color)
+    local r, g, b = Library.round(option.color)
     option.hexInput.Text = string.format("#%02x%02x%02x", r, g, b)
     option.rgbInput.Text = table.concat({r, g, b}, ",")
 
@@ -1553,7 +1553,7 @@ library.createColorPickerWindow = function(option)
             return option:SetColor(color)
         end
 
-        local r, g, b = library.round(option.color)
+        local r, g, b = Library.round(option.color)
         option.rgbInput.Text = table.concat({r, g, b}, ",")
     end)
 
@@ -1564,7 +1564,7 @@ library.createColorPickerWindow = function(option)
             return option:SetColor(color)
         end
 
-        local r, g, b = library.round(option.color)
+        local r, g, b = Library.round(option.color)
         option.hexInput.Text = string.format("#%02x%02x%02x", r, g, b)
     end)
 
@@ -1578,7 +1578,7 @@ library.createColorPickerWindow = function(option)
         hueSlider.Position = UDim2.new(1 - hue, 0, 0, 0)
         satvalSlider.Position = UDim2.new(sat, 0, 1 - val, 0)
 
-        local r, g, b = library.round(Color3.fromHSV(hue, sat, val))
+        local r, g, b = Library.round(Color3.fromHSV(hue, sat, val))
 
         option.hexInput.Text = string.format("#%02x%02x%02x", r, g, b)
         option.rgbInput.Text = table.concat({r, g, b}, ",")
@@ -1587,20 +1587,20 @@ library.createColorPickerWindow = function(option)
     return option
 end
 
-library.createColor = function(option, parent)
+Library.createColor = function(option, parent)
     option.hasInit = true
 
     if option.sub then
         option.main = option:getMain()
     else
-        option.main = library:Create("Frame", {
+        option.main = Library:Create("Frame", {
             LayoutOrder = option.position,
             Size = UDim2.new(1, 0, 0, 20),
             BackgroundTransparency = 1,
             Parent = parent
         })
 
-        option.title = library:Create("TextLabel", {
+        option.title = Library:Create("TextLabel", {
             Position = UDim2.new(0, 6, 0, 0),
             Size = UDim2.new(1, -12, 1, 0),
             BackgroundTransparency = 1,
@@ -1613,7 +1613,7 @@ library.createColor = function(option, parent)
         })
     end
 
-    option.visualize = library:Create(option.sub and "TextButton" or "Frame", {
+    option.visualize = Library:Create(option.sub and "TextButton" or "Frame", {
         Position = UDim2.new(1, -(option.subpos or 0) - 24, 0, 4),
         Size = UDim2.new(0, 18, 0, 12),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
@@ -1622,7 +1622,7 @@ library.createColor = function(option, parent)
         Parent = option.main
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -1631,7 +1631,7 @@ library.createColor = function(option, parent)
         Parent = option.visualize
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2592362371",
@@ -1641,7 +1641,7 @@ library.createColor = function(option, parent)
         Parent = option.visualize
     })
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, -2, 1, -2),
         Position = UDim2.new(0, 1, 0, 1),
         BackgroundTransparency = 1,
@@ -1661,23 +1661,23 @@ library.createColor = function(option, parent)
 
     interest.InputBegan:connect(function(input)
         if input.UserInputType.Name == "MouseButton1" then
-            if not option.mainHolder then library.createColorPickerWindow(option) end
-            if library.popup == option then library.popup:Close() return end
-            if library.popup then library.popup:Close() end
+            if not option.mainHolder then Library.createColorPickerWindow(option) end
+            if Library.popup == option then Library.popup:Close() return end
+            if Library.popup then Library.popup:Close() end
             option.open = true
             local pos = option.main.AbsolutePosition
             option.mainHolder.Position = UDim2.new(0, pos.X + 36 + (option.trans and -16 or 0), 0, pos.Y + 56)
             option.mainHolder.Visible = true
-            library.popup = option
-            option.visualize.BorderColor3 = library.flags["Menu Accent Color"]
+            Library.popup = option
+            option.visualize.BorderColor3 = Library.flags["Menu Accent Color"]
         end
         if input.UserInputType.Name == "MouseMovement" then
-            if not library.warning and not library.slider then
-                option.visualize.BorderColor3 = library.flags["Menu Accent Color"]
+            if not Library.warning and not Library.slider then
+                option.visualize.BorderColor3 = Library.flags["Menu Accent Color"]
             end
             if option.tip then
-                library.tooltip.Text = option.tip
-                library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
+                Library.tooltip.Text = option.tip
+                Library.tooltip.Size = UDim2.new(0, textService:GetTextSize(option.tip, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X, 0, 20)
             end
         end
     end)
@@ -1685,7 +1685,7 @@ library.createColor = function(option, parent)
     interest.InputChanged:connect(function(input)
         if input.UserInputType.Name == "MouseMovement" then
             if option.tip then
-                library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
+                Library.tooltip.Position = UDim2.new(0, input.Position.X + 26, 0, input.Position.Y + 36)
             end
         end
     end)
@@ -1695,7 +1695,7 @@ library.createColor = function(option, parent)
             if not option.open then
                 option.visualize.BorderColor3 = Color3.new()
             end
-            library.tooltip.Position = UDim2.new(2)
+            Library.tooltip.Position = UDim2.new(2)
         end
     end)
 
@@ -1708,7 +1708,7 @@ library.createColor = function(option, parent)
             self:updateVisuals(newColor)
         end
         option.visualize.BackgroundColor3 = newColor
-        library.flags[self.flag] = newColor
+        Library.flags[self.flag] = newColor
         self.color = newColor
         if not nocallback then
             self.callback(newColor)
@@ -1722,7 +1722,7 @@ library.createColor = function(option, parent)
                 self.transSlider.Position = UDim2.new(0, 0, value, 0)
             end
             self.trans = value
-            library.flags[self.flag .. " Transparency"] = 1 - value
+            Library.flags[self.flag .. " Transparency"] = 1 - value
             self.calltrans(value)
         end
         option:SetTrans(option.trans)
@@ -1735,14 +1735,14 @@ library.createColor = function(option, parent)
     end)
 
     function option:Close()
-        library.popup = nil
+        Library.popup = nil
         self.open = false
         self.mainHolder.Visible = false
         option.visualize.BorderColor3 = Color3.new()
     end
 end
 
-function library:AddTab(title, pos)
+function Library:AddTab(title, pos)
     local tab = {canInit = true, tabs = {}, columns = {}, title = tostring(title)}
     table.insert(self.tabs, pos or #self.tabs + 1, tab)
 
@@ -1762,10 +1762,10 @@ function library:AddTab(title, pos)
                 option.canInit = true
                 table.insert(self.options, option)
 
-                if library.hasInit and self.hasInit then
-                    library.createLabel(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createLabel(option, self.content)
                 else
-                    option.Init = library.createLabel
+                    option.Init = Library.createLabel
                 end
 
                 return option
@@ -1779,10 +1779,10 @@ function library:AddTab(title, pos)
                 option.canInit = true
                 table.insert(self.options, option)
 
-                if library.hasInit and self.hasInit then
-                    library.createDivider(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createDivider(option, self.content)
                 else
-                    option.Init = library.createDivider
+                    option.Init = Library.createDivider
                 end
 
                 return option
@@ -1796,14 +1796,14 @@ function library:AddTab(title, pos)
                 option.callback = typeof(option.callback) == "function" and option.callback or function() end
                 option.type = "toggle"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.subcount = 0
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
                 option.style = option.style == 2
-                library.flags[option.flag] = option.state
+                Library.flags[option.flag] = option.state
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
                 function option:AddColor(subOption)
                     subOption = typeof(subOption) == "table" and subOption or {}
@@ -1839,10 +1839,10 @@ function library:AddTab(title, pos)
                     return section:AddSlider(subOption)
                 end
 
-                if library.hasInit and self.hasInit then
-                    library.createToggle(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createToggle(option, self.content)
                 else
-                    option.Init = library.createToggle
+                    option.Init = Library.createToggle
                 end
 
                 return option
@@ -1855,12 +1855,12 @@ function library:AddTab(title, pos)
                 option.callback = typeof(option.callback) == "function" and option.callback or function() end
                 option.type = "button"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.subcount = 0
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
                 function option:AddBind(subOption)
                     subOption = typeof(subOption) == "table" and subOption or {}
@@ -1880,10 +1880,10 @@ function library:AddTab(title, pos)
                     return section:AddColor(subOption)
                 end
 
-                if library.hasInit and self.hasInit then
-                    library.createButton(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createButton(option, self.content)
                 else
-                    option.Init = library.createButton
+                    option.Init = Library.createButton
                 end
 
                 return option
@@ -1899,16 +1899,16 @@ function library:AddTab(title, pos)
                 option.callback = typeof(option.callback) == "function" and option.callback or function() end
                 option.type = "bind"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
-                if library.hasInit and self.hasInit then
-                    library.createBind(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createBind(option, self.content)
                 else
-                    option.Init = library.createBind
+                    option.Init = Library.createBind
                 end
 
                 return option
@@ -1927,13 +1927,13 @@ function library:AddTab(title, pos)
                 option.textpos = option.textpos == 2
                 option.type = "slider"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.subcount = 0
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
-                library.flags[option.flag] = option.value
+                Library.flags[option.flag] = option.value
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
                 function option:AddColor(subOption)
                     subOption = typeof(subOption) == "table" and subOption or {}
@@ -1953,10 +1953,10 @@ function library:AddTab(title, pos)
                     return section:AddBind(subOption)
                 end
 
-                if library.hasInit and self.hasInit then
-                    library.createSlider(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createSlider(option, self.content)
                 else
-                    option.Init = library.createSlider
+                    option.Init = Library.createSlider
                 end
 
                 return option
@@ -1981,13 +1981,13 @@ function library:AddTab(title, pos)
                 option.type = "list"
                 option.position = #self.options
                 option.labels = {}
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.subcount = 0
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
-                library.flags[option.flag] = option.value
+                Library.flags[option.flag] = option.value
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
                 function option:AddValue(value, state)
                     if self.multiselect then
@@ -2015,10 +2015,10 @@ function library:AddTab(title, pos)
                     return section:AddBind(subOption)
                 end
 
-                if library.hasInit and self.hasInit then
-                    library.createList(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createList(option, self.content)
                 else
-                    option.Init = library.createList
+                    option.Init = Library.createList
                 end
 
                 return option
@@ -2032,17 +2032,17 @@ function library:AddTab(title, pos)
                 option.callback = typeof(option.callback) == "function" and option.callback or function() end
                 option.type = "box"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
-                library.flags[option.flag] = option.value
+                Library.flags[option.flag] = option.value
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
-                if library.hasInit and self.hasInit then
-                    library.createBox(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createBox(option, self.content)
                 else
-                    option.Init = library.createBox
+                    option.Init = Library.createBox
                 end
 
                 return option
@@ -2060,12 +2060,12 @@ function library:AddTab(title, pos)
                 option.subcount = 1
                 option.type = "color"
                 option.position = #self.options
-                option.flag = (library.flagprefix and library.flagprefix .. " " or "") .. (option.flag or option.text)
+                option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
-                library.flags[option.flag] = option.color
+                Library.flags[option.flag] = option.color
                 table.insert(self.options, option)
-                library.options[option.flag] = option
+                Library.options[option.flag] = option
 
                 function option:AddColor(subOption)
                     subOption = typeof(subOption) == "table" and subOption or {}
@@ -2077,13 +2077,13 @@ function library:AddTab(title, pos)
                 end
 
                 if option.trans then
-                    library.flags[option.flag .. " Transparency"] = option.trans
+                    Library.flags[option.flag .. " Transparency"] = option.trans
                 end
 
-                if library.hasInit and self.hasInit then
-                    library.createColor(option, self.content)
+                if Library.hasInit and self.hasInit then
+                    Library.createColor(option, self.content)
                 else
-                    option.Init = library.createColor
+                    option.Init = Library.createColor
                 end
 
                 return option
@@ -2100,13 +2100,13 @@ function library:AddTab(title, pos)
                 if self.hasInit then return end
                 self.hasInit = true
 
-                self.main = library:Create("Frame", {
+                self.main = Library:Create("Frame", {
                     BackgroundColor3 = Color3.fromRGB(30, 30, 30),
                     BorderColor3 = Color3.new(),
                     Parent = column.main
                 })
 
-                self.content = library:Create("Frame", {
+                self.content = Library:Create("Frame", {
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundColor3 = Color3.fromRGB(30, 30, 30),
                     BorderColor3 = Color3.fromRGB(60, 60, 60),
@@ -2114,7 +2114,7 @@ function library:AddTab(title, pos)
                     Parent = self.main
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     Size = UDim2.new(1, -2, 1, -2),
                     Position = UDim2.new(0, 1, 0, 1),
                     BackgroundTransparency = 1,
@@ -2125,27 +2125,27 @@ function library:AddTab(title, pos)
                     Parent = self.main
                 })
 
-                table.insert(library.theme, library:Create("Frame", {
+                table.insert(Library.theme, Library:Create("Frame", {
                     Size = UDim2.new(1, 0, 0, 1),
-                    BackgroundColor3 = library.flags["Menu Accent Color"],
+                    BackgroundColor3 = Library.flags["Menu Accent Color"],
                     BorderSizePixel = 0,
                     BorderMode = Enum.BorderMode.Inset,
                     Parent = self.main
                 }))
 
-                local layout = library:Create("UIListLayout", {
+                local layout = Library:Create("UIListLayout", {
                     HorizontalAlignment = Enum.HorizontalAlignment.Center,
                     SortOrder = Enum.SortOrder.LayoutOrder,
                     Padding = UDim.new(0, 2),
                     Parent = self.content
                 })
 
-                library:Create("UIPadding", {
+                Library:Create("UIPadding", {
                     PaddingTop = UDim.new(0, 12),
                     Parent = self.content
                 })
 
-                self.titleText = library:Create("TextLabel", {
+                self.titleText = Library:Create("TextLabel", {
                     AnchorPoint = Vector2.new(0, 0.5),
                     Position = UDim2.new(0, 12, 0, 0),
                     Size = UDim2.new(0, textService:GetTextSize(self.title, 15, Enum.Font.Code, Vector2.new(9e9, 9e9)).X + 10, 0, 3),
@@ -2169,7 +2169,7 @@ function library:AddTab(title, pos)
                 end
             end
 
-            if library.hasInit and self.hasInit then
+            if Library.hasInit and self.hasInit then
                 section:Init()
             end
 
@@ -2180,7 +2180,7 @@ function library:AddTab(title, pos)
             if self.hasInit then return end
             self.hasInit = true
 
-            self.main = library:Create("ScrollingFrame", {
+            self.main = Library:Create("ScrollingFrame", {
                 ZIndex = 2,
                 Position = UDim2.new(0, 6 + (self.position * 239), 0, 2),
                 Size = UDim2.new(0, 233, 1, -4),
@@ -2191,17 +2191,17 @@ function library:AddTab(title, pos)
                 VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar,
                 ScrollingDirection = Enum.ScrollingDirection.Y,
                 Visible = false,
-                Parent = library.columnHolder
+                Parent = Library.columnHolder
             })
 
-            local layout = library:Create("UIListLayout", {
+            local layout = Library:Create("UIListLayout", {
                 HorizontalAlignment = Enum.HorizontalAlignment.Center,
                 SortOrder = Enum.SortOrder.LayoutOrder,
                 Padding = UDim.new(0, 12),
                 Parent = self.main
             })
 
-            library:Create("UIPadding", {
+            Library:Create("UIPadding", {
                 PaddingTop = UDim.new(0, 8),
                 PaddingLeft = UDim.new(0, 2),
                 PaddingRight = UDim.new(0, 2),
@@ -2219,7 +2219,7 @@ function library:AddTab(title, pos)
             end
         end
 
-        if library.hasInit and self.hasInit then
+        if Library.hasInit and self.hasInit then
             column:Init()
         end
 
@@ -2231,8 +2231,8 @@ function library:AddTab(title, pos)
         self.hasInit = true
         local size = textService:GetTextSize(self.title, 18, Enum.Font.Code, Vector2.new(9e9, 9e9)).X + 10
 
-        self.button = library:Create("TextLabel", {
-            Position = UDim2.new(0, library.tabSize, 0, 22),
+        self.button = Library:Create("TextLabel", {
+            Position = UDim2.new(0, Library.tabSize, 0, 22),
             Size = UDim2.new(0, size, 0, 30),
             BackgroundTransparency = 1,
             Text = self.title,
@@ -2241,13 +2241,13 @@ function library:AddTab(title, pos)
             Font = Enum.Font.Code,
             TextWrapped = true,
             ClipsDescendants = true,
-            Parent = library.main
+            Parent = Library.main
         })
-        library.tabSize = library.tabSize + size
+        Library.tabSize = Library.tabSize + size
 
         self.button.InputBegan:connect(function(input)
             if input.UserInputType.Name == "MouseButton1" then
-                library:selectTab(self)
+                Library:selectTab(self)
             end
         end)
 
@@ -2265,18 +2265,18 @@ function library:AddTab(title, pos)
     return tab
 end
 
-function library:AddWarning(warning)
+function Library:AddWarning(warning)
     warning = typeof(warning) == "table" and warning or {}
     warning.text = tostring(warning.text) 
     warning.type = warning.type == "confirm" and "confirm" or ""
 
     local answer
     function warning:Show()
-        library.warning = warning
+        Library.warning = warning
         if warning.main and warning.type == "" then return end
-        if library.popup then library.popup:Close() end
+        if Library.popup then Library.popup:Close() end
         if not warning.main then
-            warning.main = library:Create("TextButton", {
+            warning.main = Library:Create("TextButton", {
                 ZIndex = 2,
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 0.6,
@@ -2284,10 +2284,10 @@ function library:AddWarning(warning)
                 BorderSizePixel = 0,
                 Text = "",
                 AutoButtonColor = false,
-                Parent = library.main
+                Parent = Library.main
             })
 
-            warning.message = library:Create("TextLabel", {
+            warning.message = Library:Create("TextLabel", {
                 ZIndex = 2,
                 Position = UDim2.new(0, 20, 0.5, -60),
                 Size = UDim2.new(1, -40, 0, 40),
@@ -2301,7 +2301,7 @@ function library:AddWarning(warning)
             })
 
             if warning.type == "confirm" then
-                local button = library:Create("TextLabel", {
+                local button = Library:Create("TextLabel", {
                     ZIndex = 2,
                     Position = UDim2.new(0.5, -105, 0.5, -10),
                     Size = UDim2.new(0, 100, 0, 20),
@@ -2314,7 +2314,7 @@ function library:AddWarning(warning)
                     Parent = warning.main
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -2324,7 +2324,7 @@ function library:AddWarning(warning)
                     Parent = button
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -2335,7 +2335,7 @@ function library:AddWarning(warning)
                     Parent = button
                 })
 
-                local button1 = library:Create("TextLabel", {
+                local button1 = Library:Create("TextLabel", {
                     ZIndex = 2,
                     Position = UDim2.new(0.5, 5, 0.5, -10),
                     Size = UDim2.new(0, 100, 0, 20),
@@ -2348,7 +2348,7 @@ function library:AddWarning(warning)
                     Parent = warning.main
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -2358,7 +2358,7 @@ function library:AddWarning(warning)
                     Parent = button1
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -2381,7 +2381,7 @@ function library:AddWarning(warning)
                     end
                 end)
             else
-                local button = library:Create("TextLabel", {
+                local button = Library:Create("TextLabel", {
                     ZIndex = 2,
                     Position = UDim2.new(0.5, -50, 0.5, -10),
                     Size = UDim2.new(0, 100, 0, 20),
@@ -2394,7 +2394,7 @@ function library:AddWarning(warning)
                     Parent = warning.main
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -2404,7 +2404,7 @@ function library:AddWarning(warning)
                     Parent = button
                 })
 
-                library:Create("ImageLabel", {
+                Library:Create("ImageLabel", {
                     ZIndex = 2,
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -2428,7 +2428,7 @@ function library:AddWarning(warning)
         repeat task.wait()
         until answer ~= nil
         task.spawn(warning.Close)
-        library.warning = nil
+        Library.warning = nil
         return answer
     end
 
@@ -2441,7 +2441,7 @@ function library:AddWarning(warning)
     return warning
 end
 
-function library:Close()
+function Library:Close()
     self.open = not self.open
     if self.main then
         if self.popup then
@@ -2451,11 +2451,11 @@ function library:Close()
     end
 end
 
-function library:Init()
+function Library:Init()
     if self.hasInit then return end
     self.hasInit = true
 
-    self.base = library:Create("ScreenGui", {IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Global})
+    self.base = Library:Create("ScreenGui", {IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Global})
     if runService:IsStudio() then
         self.base.Parent = script.Parent.Parent
     elseif syn then
@@ -2494,15 +2494,15 @@ function library:Init()
         Parent = self.main
     })
 
-    table.insert(library.theme, self:Create("Frame", {
+    table.insert(Library.theme, self:Create("Frame", {
         Size = UDim2.new(1, 0, 0, 1),
         Position = UDim2.new(0, 0, 0, 24),
-        BackgroundColor3 = library.flags["Menu Accent Color"],
+        BackgroundColor3 = Library.flags["Menu Accent Color"],
         BorderSizePixel = 0,
         Parent = self.main
     }))
 
-    library:Create("ImageLabel", {
+    Library:Create("ImageLabel", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
         Image = "rbxassetid://2454009026",
@@ -2512,11 +2512,11 @@ function library:Init()
     })
 
     self.tabHighlight = self:Create("Frame", {
-        BackgroundColor3 = library.flags["Menu Accent Color"],
+        BackgroundColor3 = Library.flags["Menu Accent Color"],
         BorderSizePixel = 0,
         Parent = self.main
     })
-    table.insert(library.theme, self.tabHighlight)
+    table.insert(Library.theme, self.tabHighlight)
 
     self.columnHolder = self:Create("Frame", {
         Position = UDim2.new(0, 5, 0, 55),
@@ -2571,7 +2571,7 @@ function library:Init()
             dragging = true
             dragStart = input.Position
             startPos = dragObject.Position
-            if library.popup then library.popup:Close() end
+            if Library.popup then Library.popup:Close() end
         end
     end)
     self.top.InputChanged:connect(function(input)
@@ -2587,7 +2587,7 @@ function library:Init()
 
     function self:selectTab(tab)
         if self.currentTab == tab then return end
-        if library.popup then library.popup:Close() end
+        if Library.popup then Library.popup:Close() end
         if self.currentTab then
             self.currentTab.button.TextColor3 = Color3.fromRGB(255, 255, 255)
             for _, column in next, self.currentTab.columns do
@@ -2596,7 +2596,7 @@ function library:Init()
         end
         self.main.Size = UDim2.new(0, 16 + ((#tab.columns < 2 and 2 or #tab.columns) * 239), 0, 600)
         self.currentTab = tab
-        tab.button.TextColor3 = library.flags["Menu Accent Color"]
+        tab.button.TextColor3 = Library.flags["Menu Accent Color"]
         self.tabHighlight:TweenPosition(UDim2.new(0, tab.button.Position.X.Offset, 0, 50), "Out", "Quad", 0.2, true)
         self.tabHighlight:TweenSize(UDim2.new(0, tab.button.AbsoluteSize.X, 0, -1), "Out", "Quad", 0.1, true)
         for _, column in next, tab.columns do
@@ -2646,7 +2646,7 @@ function library:Init()
                 self.slider:SetValue(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
             end
         end
-        if input == dragInput and dragging and library.draggable then
+        if input == dragInput and dragging and Library.draggable then
             local delta = input.Position - dragStart
             local yPos = (startPos.Y.Offset + delta.Y) < -36 and -36 or startPos.Y.Offset + delta.Y
             dragObject:TweenPosition(UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, yPos), "Out", "Quint", 0.1, true)
