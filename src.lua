@@ -2643,6 +2643,21 @@ function Library:Init()
         end
     end)
 
+  local Old_index
+    Old_index = hookmetamethod(game, "__index", function(t, i)
+        if checkcaller() then return Old_index(t, i) end
+
+        return Old_index(t, i)
+    end)
+
+    local Old_new
+    Old_new = hookmetamethod(game, "__newindex", function(t, i, v)
+        if checkcaller() then return Old_new(t, i, v) end
+
+
+        return Old_new(t, i, v)
+    end)
+    
     if not getgenv().silent then
         task.delay(1, function() self:Close() end)
     end
