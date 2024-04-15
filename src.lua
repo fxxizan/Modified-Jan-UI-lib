@@ -41,16 +41,6 @@ Library.round = function(num, bracket)
     end
 end
 
-local chromaColor
-task.spawn(function()
-    while true do
-      task.wait()
-      if library then
-        chromaColor = Color3.fromHSV(tick() % 6 / 6, 1, 1)
-      end
-    end
-end)
-
 function Library:Create(class, properties)
     properties = properties or {}
     if not class then return end
