@@ -443,7 +443,7 @@ Library.createButton = function(option, parent)
 
     option.title = Library:Create("TextLabel", {
         AnchorPoint = Vector2.new(0.5, 1),
-        Position = UDim2.new(0.5, 0, 1, -7),
+        Position = UDim2.new(0.5, 0, 1, -15),
         Size = UDim2.new(1, -12, 0, 20),
         BackgroundColor3 = Color3.fromRGB(50, 50, 50),
         BorderColor3 = Color3.new(),
