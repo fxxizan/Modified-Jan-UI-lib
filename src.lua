@@ -549,7 +549,7 @@ Library.createBind = function(option, parent)
     end
 
     local bindinput = Library:Create(option.sub and "TextButton" or "TextLabel", {
-        Position = UDim2.new(1, -6 - (option.subpos or 0), option.IsButton and 0.2 or 0, option.sub and 3 or 4),
+        Position = UDim2.new(1, -6 - (option.subpos or 0), option.IsButton and -0.2 or 0, option.sub and 3 or 4),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         BorderSizePixel = 0,
@@ -559,6 +559,10 @@ Library.createBind = function(option, parent)
         TextXAlignment = Enum.TextXAlignment.Right,
         Parent = option.main
     })
+
+    if option.IsButton then
+        print("IsButton")
+    end
 
     if option.sub then
         bindinput.AutoButtonColor = false
