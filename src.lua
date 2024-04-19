@@ -784,6 +784,7 @@ Library.createSlider = function(option, parent)
     function option:SetValue(value, nocallback)
         if typeof(value) ~= "number" then value = 0 end
         value = Library.round(value, option.float)
+        print(value)
         value = math.clamp(value, self.min, self.max)
         if self.min >= 0 then
             option.fill:TweenSize(UDim2.new((value - self.min) / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.05, true)
@@ -2634,7 +2635,6 @@ function Library:Init()
             
             if self.slider then
                 self.slider:SetValue(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
-                print(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
             end
         end
         if input == dragInput and dragging and Library.draggable then
