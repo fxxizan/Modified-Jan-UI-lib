@@ -13,8 +13,8 @@ if getgenv().Library then
     getgenv().Library:Unload()
 end
 
-local library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt"}
-getgenv().Library = library
+local Library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt"}
+getgenv().Library = Library
 
 --Locals
 local dragging, dragInput, dragStart, startPos, dragObject
@@ -81,8 +81,8 @@ function Library:Unload()
             coroutine.resume(coroutine.create(o.SetState, o))
         end
     end
-    library = nil
-    getgenv().library = nil
+    Library = nil
+    getgenv().Library = nil
 end
 
 function Library:LoadConfig(config)
@@ -418,7 +418,7 @@ Library.createToggle = function(option, parent)
 
     if option.state ~= nil then
         task.delay(1, function()
-            if library then
+            if Library then
                 option.callback(option.state)
             end
         end)
@@ -487,7 +487,7 @@ Library.createButton = function(option, parent)
     option.title.InputBegan:connect(function(input)
         if input.UserInputType.Name == "MouseButton1" then
             option.callback()
-            if library then
+            if Library then
                 Library.flags[option.flag] = true
             end
             if option.tip then
@@ -800,7 +800,7 @@ Library.createSlider = function(option, parent)
         end
     end
     task.delay(1, function()
-        if library then
+        if Library then
             option:SetValue(option.value)
         end
     end)
@@ -1131,7 +1131,7 @@ Library.createList = function(option, parent)
         end
     end
     task.delay(1, function()
-        if library then
+        if Library then
             option:SetValue(option.value)
         end
     end)
@@ -1275,7 +1275,7 @@ Library.createBox = function(option, parent)
         end
     end
     task.delay(1, function()
-        if library then
+        if Library then
             option:SetValue(option.value)
         end
     end)
@@ -1720,7 +1720,7 @@ Library.createColor = function(option, parent)
     end
 
     task.delay(1, function()
-        if library then
+        if Library then
             option:SetColor(option.color)
         end
     end)
