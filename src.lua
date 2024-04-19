@@ -549,7 +549,7 @@ Library.createBind = function(option, parent)
     end
 
     local bindinput = Library:Create(option.sub and "TextButton" or "TextLabel", {
-        Position = UDim2.new(1, -6 - (option.subpos or 0), (option.type == "button" and 1.5) or 0, option.sub and 2 or 3),
+        Position = UDim2.new(1, -6 - (option.subpos or 0), 0, option.sub and 2 or 3),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         BorderSizePixel = 0,
@@ -560,6 +560,10 @@ Library.createBind = function(option, parent)
         Parent = option.main
     })
 
+    if option.type == "button" then
+        print("Button keybind")
+        bindinput.Position = UDim2.new(1, -6 - (option.subpos or 0), 1, option.sub and 4 or 5)
+    end
     if option.sub then
         bindinput.AutoButtonColor = false
     end
