@@ -563,7 +563,10 @@ Library.createBind = function(option, parent)
     if option.type == "button" then
         print("Button keybind")
         bindinput.Position = UDim2.new(1, -6 - (option.subpos or 0), 1, option.sub and 4 or 5)
+    else
+        print("not button")
     end
+    
     if option.sub then
         bindinput.AutoButtonColor = false
     end
