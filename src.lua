@@ -35,7 +35,7 @@ Library.round = function(num, bracket)
     elseif typeof(num) == "Color3" then
         return Library.round(num.r * 255), Library.round(num.g * 255), Library.round(num.b * 255)
     else
-        return num - num % (bracket or 1)
+        return math.floor(num / bracket + 0.5) * bracket
     end
 end
 
