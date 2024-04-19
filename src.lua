@@ -1,7 +1,5 @@
 --[[
-Didn't modify the library much other than removing a potential detection vector and removing all deprecated functions
-
-I was bored lol
+Removed potential detection vectors and put in minor performance improvements
 ]]
 
 --LIBRARY START
@@ -2634,6 +2632,7 @@ function Library:Init()
             
             if self.slider then
                 self.slider:SetValue(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
+                print(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
             end
         end
         if input == dragInput and dragging and Library.draggable then
@@ -2641,21 +2640,6 @@ function Library:Init()
             local yPos = (startPos.Y.Offset + delta.Y) < -36 and -36 or startPos.Y.Offset + delta.Y
             dragObject:TweenPosition(UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, yPos), "Out", "Quint", 0.1, true)
         end
-    end)
-
-  local Old_index
-    Old_index = hookmetamethod(game, "__index", function(t, i)
-        if checkcaller() then return Old_index(t, i) end
-
-        return Old_index(t, i)
-    end)
-
-    local Old_new
-    Old_new = hookmetamethod(game, "__newindex", function(t, i, v)
-        if checkcaller() then return Old_new(t, i, v) end
-
-
-        return Old_new(t, i, v)
     end)
     
     if not getgenv().silent then
