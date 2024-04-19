@@ -2693,3 +2693,4 @@ local function promptLib()
 end 
 
 --LIBRARY END
+print("Test")
