@@ -549,7 +549,7 @@ Library.createBind = function(option, parent)
     end
 
     local bindinput = Library:Create(option.sub and "TextButton" or "TextLabel", {
-        Position = UDim2.new(1, -6 - (option.subpos or 0), 1, option.sub and 50 or 5),
+        Position = UDim2.new(1, -6 - (option.subpos or 0), option.IsButton and 0.2 or 0, option.sub and 3 or 4),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         BorderSizePixel = 0,
@@ -1858,6 +1858,8 @@ function Library:AddTab(title, pos)
                     subOption.sub = true
                     subOption.subpos = self.subcount * 24
                     subOption.type = option.type
+                    subOption.IsButton = true
+
                     function subOption:getMain() option.main.Size = UDim2.new(1, 0, 0, 40) return option.main end
                     self.subcount = self.subcount + 1
                     return section:AddBind(subOption)
@@ -1895,6 +1897,7 @@ function Library:AddTab(title, pos)
                 option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
+                option.IsButton = option.IsButton
 
                 table.insert(self.options, option)
                 Library.options[option.flag] = option
