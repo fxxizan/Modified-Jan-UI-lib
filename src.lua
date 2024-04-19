@@ -549,7 +549,7 @@ Library.createBind = function(option, parent)
     end
 
     local bindinput = Library:Create(option.sub and "TextButton" or "TextLabel", {
-        Position = UDim2.new(1, -6 - (option.subpos or 0), 0, option.sub and 2 or 3),
+        Position = UDim2.new(1, -6 - (option.subpos or 0), 0, option.sub and 3 or 4),
         SizeConstraint = Enum.SizeConstraint.RelativeYY,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         BorderSizePixel = 0,
@@ -559,13 +559,6 @@ Library.createBind = function(option, parent)
         TextXAlignment = Enum.TextXAlignment.Right,
         Parent = option.main
     })
-
-    if option.buttonType == "button" then
-        print("Button keybind")
-        bindinput.Position = UDim2.new(1, -6 - (option.subpos or 0), 1, option.sub and 4 or 5)
-    else
-        print("not button")
-    end
 
     if option.sub then
         bindinput.AutoButtonColor = false
@@ -1874,7 +1867,7 @@ function Library:AddTab(title, pos)
                     subOption = typeof(subOption) == "table" and subOption or {}
                     subOption.sub = true
                     subOption.subpos = self.subcount * 24
-                    subOption.buttonType = option.type
+
                     function subOption:getMain() option.main.Size = UDim2.new(1, 0, 0, 40) return option.main end
                     self.subcount = self.subcount + 1
                     return section:AddColor(subOption)
@@ -1902,7 +1895,6 @@ function Library:AddTab(title, pos)
                 option.flag = (Library.flagprefix and Library.flagprefix .. " " or "") .. (option.flag or option.text)
                 option.canInit = (option.canInit ~= nil and option.canInit) or true
                 option.tip = option.tip and tostring(option.tip)
-                option.buttonType = option.buttonType
 
                 table.insert(self.options, option)
                 Library.options[option.flag] = option
