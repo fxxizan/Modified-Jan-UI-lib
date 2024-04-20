@@ -39,7 +39,7 @@ Library.round = function(num, bracket)
         
         local OriginalRoundedValue = math.floor(num / bracket + 0.5) * bracket
 
-        return math.floor(OriginalRoundedValue)
+        return OriginalRoundedValue
     end
 end
 
