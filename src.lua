@@ -910,7 +910,7 @@ Library.createList = function(option, parent)
         Parent = Library.base
     })
 
-    option.content = Library:Create("ScrollingFrame", {
+    table.insert(Library.theme, option.content = Library:Create("ScrollingFrame", {
         ZIndex = 4,
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -922,7 +922,7 @@ Library.createList = function(option, parent)
         TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
         BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
         Parent = option.holder
-    })
+    }))
 
     Library:Create("ImageLabel", {
         ZIndex = 4,
