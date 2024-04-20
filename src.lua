@@ -37,7 +37,9 @@ Library.round = function(num, bracket)
     else
         if not bracket then bracket = 1 end;
         
-        return math.floor(num / bracket + 0.5) * bracket
+        local OriginalRoundedValue = math.floor(num / bracket + 0.5) * bracket
+
+        return math.floor(OriginalRoundedValue)
     end
 end
 
