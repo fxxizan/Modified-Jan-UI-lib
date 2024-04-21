@@ -27,7 +27,7 @@ local whitelistedMouseinputs = { --add or remove mouse inputs if you find the ne
 }
 
 --Functions
-Library.round = function(num, bracket)
+Library.round = function(num, Increment)
     if typeof(num) == "Vector2" then
         return Vector2.new(Library.round(num.X), Library.round(num.Y))
     elseif typeof(num) == "Vector3" then
@@ -36,8 +36,9 @@ Library.round = function(num, bracket)
         return Library.round(num.r * 255), Library.round(num.g * 255), Library.round(num.b * 255)
     else
         if not bracket then bracket = 1 end;
-        
-        local OriginalRoundedValue = math.floor(num / bracket + 0.5) * bracket
+        local IncrementScale = (1 / Increment)
+
+        local OriginalRoundedValue = math.round(num / IncrementScale) * IncrementScale
 
         return OriginalRoundedValue
     end
