@@ -2399,11 +2399,39 @@ function Library:AddWarning(warning)
                     if input.UserInputType.Name == "MouseButton1" then
                         answer = true
                     end
+
+                    if input.UserInputType.Name == "MouseMovement" then
+                        if not Library.slider then
+                            button.BorderColor3 = Library.flags["Menu Accent Color"]
+                        end
+                    end
+                end)
+
+                button.InputEnded:connect(function(input)
+                    if input.UserInputType.Name == "MouseMovement" then
+                        if not Library.slider then
+                            button.BorderColor3 = Color3.new()
+                        end
+                    end
                 end)
 
                 button1.InputBegan:connect(function(input)
                     if input.UserInputType.Name == "MouseButton1" then
                         answer = false
+                    end
+
+                    if input.UserInputType.Name == "MouseMovement" then
+                        if not Library.slider then
+                            button1.BorderColor3 = Library.flags["Menu Accent Color"]
+                        end
+                    end
+                end)
+
+                button1.InputEnded:connect(function(input)
+                    if input.UserInputType.Name == "MouseMovement" then
+                        if not Library.slider then
+                            button1.BorderColor3 = Color3.new()
+                        end
                     end
                 end)
             else
