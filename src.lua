@@ -44,7 +44,7 @@ Library.round = function(num, bracket)
 end
 
 Library.lerp = function(Start, Finish, Percent)
-    (1 - Percent) * Start + Percent * Finish
+    return (1 - Percent) * Start + Percent * Finish
 end
 
 function Library:Create(class, properties)
@@ -807,7 +807,7 @@ Library.createSlider = function(option, parent)
             option.fill:TweenPosition(UDim2.new((0 - self.min) / (self.max - self.min), 0, 0, 0), "Out", "Quad", 0.05, true)
             option.fill:TweenSize(UDim2.new(value / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.1, true)
         end
-        
+
         Library.flags[self.flag] = value
         self.value = value
         option.title.Text = (option.text == "nil" and "" or option.text .. ": ") .. option.value .. option.suffix
