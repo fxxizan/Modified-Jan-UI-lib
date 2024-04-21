@@ -128,8 +128,6 @@ function Library:LoadConfig(config)
     
             Config["Enabled"] = false
         end
-
-        self:SaveConfig(OtherConfigs)
     end
 end
 
