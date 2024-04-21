@@ -27,7 +27,7 @@ local whitelistedMouseinputs = { --add or remove mouse inputs if you find the ne
 }
 
 --Functions
-Library.round = function(num, Increment)
+Library.round = function(num, bracket)
     if typeof(num) == "Vector2" then
         return Vector2.new(Library.round(num.X), Library.round(num.Y))
     elseif typeof(num) == "Vector3" then
@@ -36,12 +36,15 @@ Library.round = function(num, Increment)
         return Library.round(num.r * 255), Library.round(num.g * 255), Library.round(num.b * 255)
     else
         if not bracket then bracket = 1 end;
-        local IncrementScale = (1 / Increment)
-
-        local OriginalRoundedValue = math.round(num / IncrementScale) * IncrementScale
+        
+        local OriginalRoundedValue = math.floor(num / bracket + 0.5) * bracket
 
         return OriginalRoundedValue
     end
+end
+
+Library.lerp = function(Start, Finish, Percent)
+    (1 - Percent) * Start + Percent * Finish
 end
 
 function Library:Create(class, properties)
@@ -753,7 +756,16 @@ Library.createSlider = function(option, parent)
             else
                 Library.slider = option
                 option.slider.BorderColor3 = Library.flags["Menu Accent Color"]
-                option:SetValue(option.min + ((input.Position.X - option.slider.AbsolutePosition.X) / option.slider.AbsoluteSize.X) * (option.max - option.min))
+
+                local NewPosition = (input.Position.X - option.slider.slider.AbsolutePosition.X) / option.slider.slider.AbsoluteSize.X
+                local Percentage = math.clamp(math.round(NewPosition / option.slider.float) * option.slider.float, 0, 1)
+
+                local NewValue = Library.lerp(option.slider.min, option.slider.max, Percentage)
+                local IncrementScale = (1 / option.slider.float)
+            
+                NewValue = math.round(NewValue * IncrementScale) / IncrementScale
+
+                option:SetValue(NewValue)
             end
         end
         if input.UserInputType.Name == "MouseMovement" then
@@ -787,15 +799,15 @@ Library.createSlider = function(option, parent)
 
     function option:SetValue(value, nocallback)
         if typeof(value) ~= "number" then value = 0 end
-        value = Library.round(value, option.float)
-        print(value)
         value = math.clamp(value, self.min, self.max)
+
         if self.min >= 0 then
             option.fill:TweenSize(UDim2.new((value - self.min) / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.05, true)
         else
             option.fill:TweenPosition(UDim2.new((0 - self.min) / (self.max - self.min), 0, 0, 0), "Out", "Quad", 0.05, true)
             option.fill:TweenSize(UDim2.new(value / (self.max - self.min), 0, 1, 0), "Out", "Quad", 0.1, true)
         end
+        
         Library.flags[self.flag] = value
         self.value = value
         option.title.Text = (option.text == "nil" and "" or option.text .. ": ") .. option.value .. option.suffix
@@ -2644,11 +2656,19 @@ function Library:Init()
         if not self.open then return end
         
         if input.UserInputType.Name == "MouseMovement" then
-            
             if self.slider then
-                self.slider:SetValue(self.slider.min + ((input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X) * (self.slider.max - self.slider.min))
+                local NewPosition = (input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X
+                local Percentage = math.clamp(math.round(NewPosition / self.slider.float) * self.slider.float, 0, 1)
+
+                local NewValue = Library.lerp(self.slider.min, self.slider.max, Percentage)
+                local IncrementScale = (1 / self.slider.float)
+            
+                NewValue = math.round(NewValue * IncrementScale) / IncrementScale
+
+                self.slider:SetValue(NewValue)
             end
         end
+
         if input == dragInput and dragging and Library.draggable then
             local delta = input.Position - dragStart
             local yPos = (startPos.Y.Offset + delta.Y) < -36 and -36 or startPos.Y.Offset + delta.Y
