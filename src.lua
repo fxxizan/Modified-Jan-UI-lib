@@ -758,11 +758,11 @@ Library.createSlider = function(option, parent)
                 option.slider.BorderColor3 = Library.flags["Menu Accent Color"]
 
                 local NewPosition = (input.Position.X - option.slider.AbsolutePosition.X) / option.slider.AbsoluteSize.X
-                local Percentage = math.clamp(math.round(NewPosition / option.slider.float) * option.slider.float, 0, 1)
+                local Percentage = math.clamp(NewPosition, 0, 1)
+                
+                local NewValue = Library.lerp(option.min, option.max, Percentage)
+                local IncrementScale = (1 / option.float)
 
-                local NewValue = Library.lerp(option.slider.min, option.slider.max, Percentage)
-                local IncrementScale = (1 / option.slider.float)
-            
                 NewValue = math.round(NewValue * IncrementScale) / IncrementScale
 
                 option:SetValue(NewValue)
@@ -2658,11 +2658,11 @@ function Library:Init()
         if input.UserInputType.Name == "MouseMovement" then
             if self.slider then
                 local NewPosition = (input.Position.X - self.slider.slider.AbsolutePosition.X) / self.slider.slider.AbsoluteSize.X
-                local Percentage = math.clamp(math.round(NewPosition / self.slider.float) * self.slider.float, 0, 1)
+                local Percentage = math.clamp(NewPosition, 0, 1)
 
                 local NewValue = Library.lerp(self.slider.min, self.slider.max, Percentage)
                 local IncrementScale = (1 / self.slider.float)
-            
+
                 NewValue = math.round(NewValue * IncrementScale) / IncrementScale
 
                 self.slider:SetValue(NewValue)
