@@ -13,7 +13,7 @@ if getgenv().Library then
     getgenv().Library:Unload()
 end
 
-local Library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt", filename = "Fz."}
+local Library = {tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt"}
 getgenv().Library = Library
 
 --Locals
