@@ -122,9 +122,11 @@ function Library:LoadConfig(config)
     end
 
     for Index, OtherConfigs in pairs(self:GetConfigs()) do
-        local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(OtherConfigs)) end)
-
-        Config["Enabled"] = false
+        if loadfile(OtherConfigs) ~= loadfile(self.foldername .. "/" .. config .. self.fileext) then
+            local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(OtherConfigs)) end)
+            Config = Read and Config or {}
+    
+            Config["Enabled"] = false
     end
 end
 
