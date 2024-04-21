@@ -757,7 +757,7 @@ Library.createSlider = function(option, parent)
                 Library.slider = option
                 option.slider.BorderColor3 = Library.flags["Menu Accent Color"]
 
-                local NewPosition = (input.Position.X - option.slider.slider.AbsolutePosition.X) / option.slider.slider.AbsoluteSize.X
+                local NewPosition = (input.Position.X - option.slider.AbsolutePosition.X) / option.slider.AbsoluteSize.X
                 local Percentage = math.clamp(math.round(NewPosition / option.slider.float) * option.slider.float, 0, 1)
 
                 local NewValue = Library.lerp(option.slider.min, option.slider.max, Percentage)
