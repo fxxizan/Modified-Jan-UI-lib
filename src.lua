@@ -2297,6 +2297,8 @@ function Library:AddWarning(warning)
     warning.type = warning.type == "confirm" and "confirm" or ""
 
     local answer
+    local confirmed = false
+
     function warning:Show()
         Library.warning = warning
         if warning.main and warning.type == "" then return end
@@ -2398,6 +2400,7 @@ function Library:AddWarning(warning)
                 button.InputBegan:connect(function(input)
                     if input.UserInputType.Name == "MouseButton1" then
                         answer = true
+                        confirmed = true
                     end
 
                     if input.UserInputType.Name == "MouseMovement" then
@@ -2418,6 +2421,7 @@ function Library:AddWarning(warning)
                 button1.InputBegan:connect(function(input)
                     if input.UserInputType.Name == "MouseButton1" then
                         answer = false
+                        confirmed = true
                     end
 
                     if input.UserInputType.Name == "MouseMovement" then
@@ -2472,18 +2476,25 @@ function Library:AddWarning(warning)
                 button.InputBegan:connect(function(input)
                     if input.UserInputType.Name == "MouseButton1" then
                         answer = true
+                        confirmed = true
                     end
                 end)
             end
         end
+
         warning.main.Visible = true
         warning.message.Text = warning.text
 
         repeat task.wait()
-        until answer ~= nil
+        until confirmed == true
+        local oldanswer = answer
+
         task.spawn(warning.Close)
         Library.warning = nil
-        return answer
+
+        confirmed = false
+
+        return oldanswer
     end
 
     function warning:Close()
