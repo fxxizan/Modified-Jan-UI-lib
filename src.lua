@@ -13,7 +13,7 @@ if getgenv().Library then
     getgenv().Library:Unload()
 end
 
-local Library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt"}
+local Library = {design = getgenv().design == "kali" and "kali" or "uwuware", tabs = {}, draggable = true, flags = {}, title = "Fz.", open = false, popup = nil, instances = {}, connections = {}, options = {}, notifications = {}, tabSize = 0, theme = {}, foldername = "FaizanWasHere", fileext = ".txt", filename = "Fz."}
 getgenv().Library = Library
 
 --Locals
@@ -96,6 +96,9 @@ function Library:LoadConfig(config)
     if table.find(self:GetConfigs(), config) then
         local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(self.foldername .. "/" .. config .. self.fileext)) end)
         Config = Read and Config or {}
+
+        Config["Enabled"] = true
+
         for _, option in next, self.options do
             if option.hasInit then
                 if option.type ~= "button" and option.flag and not option.skipflag then
@@ -117,13 +120,21 @@ function Library:LoadConfig(config)
             end
         end
     end
+
+    for Index, OtherConfigs in pairs(self:GetConfigs()) do
+        local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(OtherConfigs)) end)
+
+        Config["Enabled"] = false
+    end
 end
 
 function Library:SaveConfig(config)
     local Config = {}
+
     if table.find(self:GetConfigs(), config) then
         Config = cloneref(game:GetService"HttpService"):JSONDecode(readfile(self.foldername .. "/" .. config .. self.fileext))
     end
+
     for _, option in next, self.options do
         if option.type ~= "button" and option.flag and not option.skipflag then
             if option.type == "toggle" then
