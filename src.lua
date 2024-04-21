@@ -127,6 +127,7 @@ function Library:LoadConfig(config)
             Config = Read and Config or {}
     
             Config["Enabled"] = false
+        end
     end
 end
 
