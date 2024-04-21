@@ -122,7 +122,7 @@ function Library:LoadConfig(config)
     end
 
     for Index, OtherConfigs in pairs(self:GetConfigs()) do
-        if loadfile(OtherConfigs) ~= loadfile(self.foldername .. "/" .. config .. self.fileext) then
+        if OtherConfigs ~= config then
             local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(OtherConfigs)) end)
             Config = Read and Config or {}
     
