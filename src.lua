@@ -97,7 +97,7 @@ function Library:LoadConfig(config)
         local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(self.foldername .. "/" .. config .. self.fileext)) end)
         Config = Read and Config or {}
 
-        Config["Enabled"] = true
+        Config["Enabled"] = 1
 
         for _, option in next, self.options do
             if option.hasInit then
@@ -126,8 +126,9 @@ function Library:LoadConfig(config)
             local Read, Config = pcall(function() return cloneref(game:GetService"HttpService"):JSONDecode(readfile(OtherConfigs)) end)
             Config = Read and Config or {}
     
-            Config["Enabled"] = false
+            Config["Enabled"] = 0
         end
+        self:SaveConfig(OtherConfigs)
     end
 end
 
